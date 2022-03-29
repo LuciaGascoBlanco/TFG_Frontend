@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "axios": "^0.24.0",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "create-react-app": "^4.0.3",
+    "react-router": "^6.2.1",
+    "truffle-contract": "^4.0.31",
+    "truffle-flattener": "^1.5.0",
+    "web3": "^1.6.0"
+  }
+}

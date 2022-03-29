@@ -1,0 +1,36 @@
+.box {
+    background: deepskyblue;
+    border-radius: 2px;
+    text-align: right;
+    box-shadow: 5px 10px #888888;
+    padding: 10px;
+    margin: 30px;
+    width: 600px;
+}
+
+.box .box-header {
+    display: flex;
+}
+
+.box .box-author {
+    width: 50%;
+    margin: 0;
+    text-align: left;
+    padding: 20px;
+    font-weight: bold;
+}
+
+.box .box-date {
+    width: 50%;
+    margin: 0;
+    text-align: right;
+    padding: 20px;
+    font-size: 20px;
+    color: lightgrey;
+}
+
+.box-btn {
+    font-size: 18px;
+    padding: 5px;
+    margin: 5px;
+}

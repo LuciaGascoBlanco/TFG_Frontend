@@ -1,0 +1,51 @@
+.login-popin {
+    background: rgb(83, 78, 78);
+    text-align: right;
+    box-shadow: 5px 10px #888888;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    width: 450px;
+}
+
+.login-popin .tabs {
+    width: 100%;
+    display: flex;
+    margin: 0;
+}
+
+.login-popin .login-tab {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    padding: 10px;
+    background: #1D1C1C;
+}
+
+.login-popin .login-tab.selected {
+    border-bottom: 2px solid #ccc;
+}
+
+.login-popin .login-tab:hover {
+    background: gray;
+    cursor: pointer;
+}
+
+.login-popin .submit-btn {
+    font-size: 18px;
+    padding: 5px;
+    width: 100%;
+}
+
+.login-popin form {
+    padding: 30px;
+}
+
+.login-popin input {
+    font-size: 16px;
+}
+
+.login-popin .error-msg {
+    color: red;
+    text-align: center;
+} 

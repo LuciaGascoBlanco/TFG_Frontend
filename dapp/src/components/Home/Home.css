@@ -1,0 +1,22 @@
+.home-struct {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-struct .text {
+    color: black;
+    font-size: 17px;
+    text-align: left;
+    margin-left: 150px;
+    margin-right: 170px;
+}
+
+
+.home-struct .intro {
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 13px;
+    margin-left: 150px;
+    margin-bottom: 20px;
+}

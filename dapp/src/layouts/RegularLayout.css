@@ -1,0 +1,69 @@
+.regular-layout {
+    text-align: center;
+}
+
+.regular-layout-body {
+    background-color: #d9dde0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.regular-layout-body .regular-content {
+    margin-top: 180px;
+    flex: 1;
+}
+
+.regular-layout-body .regular-head {
+    width: 100%;
+    margin: 0;
+    height: 180px;
+    background: #1D1C1C;
+    position: fixed;
+    top: 0;
+}
+
+.regular-layout .regular-layout-body .footer {
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    margin-top: 20px;
+    font-size: 14px;
+    background: #1D1C1C;
+}
+
+.regular-layout-body .regular-title {
+    margin: 40px;
+}
+
+.regular-layout-body .tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 5px;
+}
+
+.regular-layout-body .tabs .account{
+    margin-right: 50px;
+    margin-left: auto;
+    text-align: right;
+    font-size: 18px;
+    color: white;
+}
+
+.regular-layout-body .tab {
+    width: 120px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 40px;
+    text-decoration: none;
+    color: white;
+}
+
+.regular-layout-body .tab:hover {
+    background: gray;
+    cursor: pointer;
+    color: white;
+}
