@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import Web3 from 'web3';
 import Photo from '../abis/Photo.json';
 import Logo from '../public/Logo.png';
+import Profile from '../public/Profile.png';
 
 class RegularLayout extends React.Component {
 
@@ -14,7 +15,7 @@ class RegularLayout extends React.Component {
         super(props);
         this.state = {
             account: '',
-            contract: null,
+            contract: null
         }
     }
 
@@ -67,25 +68,32 @@ class RegularLayout extends React.Component {
         }
     }
 
+    async handleChange(e) {
+        e.preventDefault();
+        this.props.history.push("/login");
+    }
+
     render() {
         return (
             <div className="regular-layout">
                 <div className="regular-layout-body">
                     <div className="regular-head">
-                        <img className="regular-title" src={Logo} width="auto" alt="logo" height="40"/>
+                        <div className="flex">
+                            <Link to={"/login"} className="tabLogout"><img src={Profile} width="auto" alt="profile" height="50"/></Link>
+                            <img className="regular-title" src={Logo} width="auto" alt="logo" height="45"/>
+                        </div>
                         <div className="tabs">
                             <Link to={"/home"} className="tab">Home</Link>
                             <Link to={"/images"} className="tab">Perfil</Link>
                             <Link to={"/gallery"} className="tab">Galería</Link>
-                            <Link to={"/sold"} className="tab">Comprados</Link>
-                            <Link to={"/login"} className="tab">Logout</Link>
+                            <Link to={"/sold"} className="tab">Compras</Link>
                             <div className="account">{this.state.account}</div>
                         </div>
                     </div>
                     <div className="regular-content">
                         {this.props.children}
                     </div>
-                    <footer className="footer"><div>© 2022 Marca registrada - NFT's art gallery</div></footer>
+                    <footer className="footer"><div>© 2022 Marca registrada - Galería de arte NFT</div></footer>
                 </div>
             </div>
         );

@@ -9,6 +9,9 @@ import BigNumber from "bignumber.js";
 import Web3 from 'web3';
 import Photo from '../../abis/Photo.json';
 
+import Swal from 'sweetalert2';
+import minted from '../../public/Minted.png';
+
 class Images extends React.Component {
      constructor(props) {
          super(props);
@@ -56,42 +59,55 @@ class Images extends React.Component {
     }
 
     onPublish = (e) => {
-         e.preventDefault();
-         if (this.state.imgSrc) {
-             let data = new FormData();
-             data.append('file', this.fileInput.current.files[0], this.fileInput.current.files[0].name);    //formData.append(name, value, filename);
-             data.append('title', this.state.postContent);
-             data.append('price', this.state.postContent2);
-             upload("/v1/community/images", data,
-                    (response) => {
-                        request('get', `/v1/community/images?page=${this.state.page}`, {},
-                            (response) => {
-                                this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
-                                document.getElementById('box1').reset();  //
-                                this.state.images.map((image, i) => {
-                                    if(i === 0) {     
-                                        //mint 
-                                        var BNPrice = new BigNumber(image.price);                                 
-                                        var StringHash = JSON.stringify(image.hash);
-                                        this.state.contract.methods.mint(BNPrice, StringHash).send({from: this.state.account})
-                                        .once('receipt', (receipt) => {console.log("Ha hecho el mint");}) 
-                                        .on("transactionHash", function () {console.log("Hash")})
-                                        .on("confirmation", function () {console.log("Confirmed");})
-                                        .on("error", async function () {   //si se hace un reject en la transacción
-                                            console.log("Error");
-                                            request('delete', `/v1/community/delete?page=${this.state.page}`, {},
-                                                (response) => {
-                                                    this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""}); 
-                                                    console.log(this.state.images);
-                                                },                      
-                                                (error) => {})
-                                        }.bind(this));
-                                    }
-                                return(console.log(StringHash))})  //return para quitar el warning
-                            },                      
-                            (error) => {})
-                    },
-                    (error) => {this.setState({msgError: "Ya se ha minteado esta imagen"});})}
+        e.preventDefault();
+
+        var item1 = document.getElementById("image-post").value
+        var item2 = document.getElementById("price").value
+        if (item1 === "" || item2 === ""){
+            Swal.fire({                                                         //position: 'top-end'
+                title: "¡Advertencia!",
+                text: "Debes rellenar ambos campos para poder hacer el mint.",
+                icon: "warning",
+                width: "20%",
+                backdrop: true
+            });
+        } else {
+            if (this.state.imgSrc) {
+                let data = new FormData();
+                data.append('file', this.fileInput.current.files[0], this.fileInput.current.files[0].name);    //formData.append(name, value, filename);
+                data.append('title', this.state.postContent);
+                data.append('price', this.state.postContent2);
+                upload("/v1/community/images", data,
+                        (response) => {
+                            request('get', `/v1/community/images?page=${this.state.page}`, {},
+                                (response) => {
+                                    this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
+                                    document.getElementById('box1').reset();
+                                    this.state.images.map((image, i) => {
+                                        if(i === 0) {     
+                                            //mint
+                                            var BNPrice = new BigNumber(image.price);           
+                                            var StringHash = JSON.stringify(image.hash);
+                                            this.state.contract.methods.mint(BNPrice, StringHash).send({from: this.state.account})
+                                            .once('receipt', (receipt) => {console.log("Ha hecho el mint");}) 
+                                            .on("transactionHash", function () {console.log("Hash")})
+                                            .on("confirmation", function () {console.log("Confirmed");})
+                                            .on("error", async function () {   //si se hace un reject en la transacción
+                                                request('delete', `/v1/community/delete?page=${this.state.page}`, {},
+                                                    (response) => {
+                                                        this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
+                                                    },                      
+                                                    (error) => {})
+
+                                                window.location.reload();
+                                            }.bind(this));
+                                        }
+                                    return(console.log(StringHash))})  //return para quitar el warning
+                                },                      
+                                (error) => {})
+                        },
+                        (error) => {})}
+        }
      };
 
      onUploadImage = (event) => {
@@ -131,26 +147,6 @@ class Images extends React.Component {
             (error) => {})
      }
 
-     loadMore = (event) => {
-        const newPage = this.state.page++;
-        this.setState({page : newPage});
-
-        request('get', `/v1/community/images?page=${this.state.page}`, {},  
-            (response) => {
-                this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null});
-            },
-            (error) => {})
-
-        //MESSAGES
-        const newPageM = this.state.pageM++;
-        this.setState({pageM : newPageM});
-
-        request("get", `/v1/community/messages?page=${this.state.pageM}`, {}, 
-            (response) => {
-                this.setState({messages : response.data, hideMoreM : response.data.length === 0});},
-            (error) => {})
-     }
-
      onPublishM = e => {
         e.preventDefault();
         if (this.state.postContentM) {
@@ -172,38 +168,33 @@ class Images extends React.Component {
 
     render() {
         return(
-            <div className='principal'>
-                <div className='both'>
-                    <div className = "box0">  
-                        <form id = "box1" className = "box1">
-                            <textarea id = "image-post" className = "image-post" placeholder = "Título de la imagen" onChange = {this.onChangeHandler}/>
-                            <textarea className = "price" placeholder = "Precio en wei" onChange = {this.onChangeHandler2}/>
-                            {this.state.imgSrc && <img className = "image-content" alt = "preview" src = {this.state.imgSrc}/>}
-                            <input className = "image-input" ref= {this.fileInput} type = "file" name = "filename" onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png"/>
-                            <button className = "box-btn0" onClick ={this.onPublish}>Mintear</button>
-                            {this.state.msgError && <p className="error-msg">{this.state.msgError}</p>}
-                        </form>
-                        {this.state.images.length > 0 && this.state.images.map((image) => <Image key= {image.id} authorId = {image.userDto.id} author = {formatName(image.userDto)} date = {formatDate(image.createdDate)} title = {image.title} price = {image.price} hash = {image.hash} url = {image.path}/>)}
-                        {this.state.images.length === 0 && <div></div>}
-                        {this.state.images.length > 0 && this.state.images.length % 10 === 0 && 
-                            <div>
-                                <button className = "box-btn" disabled = {this.state.hideMore} onClick = {this.loadMore}>More</button>
-                            </div>} 
-                    </div>   
+            <div>
+                <img src={minted} alt="header" width="auto" height="210"/>
+                <div className='principal'>
+                    <div className='both'>
+                        <div className = "box0">  
+                            <form id = "box1" className = "box1">
+                                <textarea id = "image-post" className = "image-post" placeholder = "Título de la imagen" onChange = {this.onChangeHandler} required/>
+                                <input type="number" id = "price" className = "price" placeholder = "Precio en wei" onChange = {this.onChangeHandler2} required/>
+                                {this.state.imgSrc && <img className = "image-content" alt = "preview" src = {this.state.imgSrc}/>}
+                                <input className = "image-input" ref= {this.fileInput} type = "file" name = "filename" onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png"/>
+                                <input type="submit" value="Mintear" className = "box-btn0" onClick ={this.onPublish}/>
+                                {this.state.msgError && <p className="error-msg">{this.state.msgError}</p>}
+                            </form>
+                            {this.state.images.length > 0 && this.state.images.map((image) => <Image key= {image.id} authorId = {image.userDto.id} author = {formatName(image.userDto)} date = {formatDate(image.createdDate)} title = {image.title} price = {image.price} hash = {image.hash} url = {image.path}/>)}
+                            {this.state.images.length === 0 && <div></div>}
+                        </div>   
 
-                    <div>
-                        <h1 className='notes'>Mis notas</h1>
-                        <form id = "box3" className = "box3">
-                            <textarea id = "message-post" className = "message-post" placeholder = "Escribe una nota" onChange = {this.onChangeHandlerM}/>
-                            <button className = "box-btn0" onClick = {this.onPublishM}>Publicar</button>
-                        </form>
-                        {this.state.messages.length > 0  && this.state.messages.map((message) => <Message key= {message.id} authorIdM = {message.userDto.id} authorM = {formatName(message.userDto)} dateM = {formatDate(message.createdDate)} contentM = {message.content}/>)}
-                        {this.state.messages.length > 0 && this.state.messages.length % 10 === 0 && 
                         <div>
-                            <button className = "box-btn" disabled = {this.state.hideMoreM} onClick = {this.loadMoreM}>More</button>
-                        </div>}
-                        {this.state.messages.length === 0 && <div></div>}
-                    </div>                 
+                            <h1 className='notes'>Mis notas</h1>
+                            <form id = "box3" className = "box3">
+                                <textarea id = "message-post" className = "message-post" placeholder = "Escribe una nota" onChange = {this.onChangeHandlerM}/>
+                                <button className = "box-btn0" onClick = {this.onPublishM}>Publicar</button>
+                            </form>
+                            {this.state.messages.length > 0  && this.state.messages.map((message) => <Message key= {message.id} authorIdM = {message.userDto.id} authorM = {formatName(message.userDto)} dateM = {formatDate(message.createdDate)} contentM = {message.content}/>)}
+                            {this.state.messages.length === 0 && <div></div>}
+                        </div>                 
+                    </div>
                 </div>
             </div>
         );

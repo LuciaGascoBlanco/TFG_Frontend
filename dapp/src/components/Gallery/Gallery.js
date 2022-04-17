@@ -64,7 +64,7 @@ class Gallery extends React.Component {
             <div>
                 <img src={photo} alt="header" width="auto" height="210"/>               
                 <div className = "gallery-body"> {this.state.images.length > 0 && this.state.images.map((image) => <Image key= {image.id} authorId = {image.userDto.id} author = {formatName(image.userDto)} date = {formatDate(image.createdDate)} title = {image.title} price = {image.price} hash = {image.hash} url = {image.path} />)} </div>
-                {this.state.images.length === 0 && <div></div>}                
+                {this.state.images.length === 0 && <div></div>}               
             </div>
         );
     }

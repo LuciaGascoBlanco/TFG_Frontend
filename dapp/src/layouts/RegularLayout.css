@@ -25,6 +25,21 @@
     top: 0;
 }
 
+.regular-layout-body .flex {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.regular-layout-body .regular-title {
+    margin-top: 35px;
+    margin-right: 700px;
+    align-items: flex-start;
+}
+
+.regular-layout-body .flex .tabLogout{
+    margin: 20px;
+}
+
 .regular-layout .regular-layout-body .footer {
     bottom: 0;
     width: 100%;
@@ -34,36 +49,38 @@
     background: #1D1C1C;
 }
 
-.regular-layout-body .regular-title {
-    margin: 40px;
-}
-
 .regular-layout-body .tabs {
+    margin-top: 32px;
+    margin-left: 0px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-left: 5px;
 }
 
-.regular-layout-body .tabs .account{
-    margin-right: 50px;
-    margin-left: auto;
-    text-align: right;
-    font-size: 18px;
-    color: white;
-}
-
 .regular-layout-body .tab {
-    width: 120px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 40px;
+    font-family: 'Papyrus';
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: center;
     text-decoration: none;
     color: white;
 }
 
 .regular-layout-body .tab:hover {
-    background: gray;
+    background: rgb(159, 131, 78);
     cursor: pointer;
+    color: white;
+}
+
+.regular-layout-body .tabs .account{
+    align-self: flex-end;
+    padding-bottom: 20px;
+    margin-right: 30px;
+    margin-left: auto;
+    text-align: left;
+    font-size: 18px;
     color: white;
 }

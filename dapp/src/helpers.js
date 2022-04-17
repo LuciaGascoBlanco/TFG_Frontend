@@ -44,7 +44,7 @@ export const request = (method, url, data, onSuccess, onError) => {
                     setAuthHeader(response.data.token)      //Aqui se deberia meter en el sign in
                 }
                 try {
-                    onSuccess(response)     //Aqui se deberia meter en el sign up
+                    onSuccess(response)         //Aqui se deberia meter en el sign up
                 } catch (e) {
                     console.error(e);
                 }

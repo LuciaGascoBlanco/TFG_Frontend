@@ -65,7 +65,9 @@
     text-align: left;
     margin-left: 5px;
     font-size: 20px;
-    color: black;
+    color: rgb(134, 105, 50);
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .image-gallery-bottom .box-btn {

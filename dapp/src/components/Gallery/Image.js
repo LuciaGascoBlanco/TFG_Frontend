@@ -1,5 +1,4 @@
 import * as React from "react";
-import {Link} from "react-router-dom";
 import {request} from "../../helpers";
 import Web3 from 'web3';
 import Photo from '../../abis/Photo.json';
@@ -11,6 +10,7 @@ class Image extends React.Component {
         this.state = {
              account: '',
              contract: null,
+             page : 0,
              authorId : props.authorId,
              author : props.author,
              date : props.date,
@@ -20,8 +20,7 @@ class Image extends React.Component {
              url : props.url,
              disabled : false
         }
-        //this.purchase = this.purchase.bind(this); 
-        this.toBuy = this.toBuy.bind(this);           
+        this.purchase = this.purchase.bind(this);         
     }
 
     async loadWeb3() {
@@ -44,12 +43,11 @@ class Image extends React.Component {
             const abi = Photo.abi;
             const address = networkData.address;
             const contract = new web3.eth.Contract(abi, address);
-            this.setState({contract})  
-            console.log(contract)        
+            this.setState({contract})     
           } else {window.alert('Smart contract not deployed to detected network.')}
     }
 
-    /*toBuy = (e) => {
+    toBuy = (e) => {
         e.preventDefault();
         var StringHash = JSON.stringify(this.state.hash);
         var BNPrice = new BigNumber(this.state.price);
@@ -60,27 +58,31 @@ class Image extends React.Component {
         e.preventDefault();
         await this.loadWeb3();
         await this.loadBlockchainData();
+
+        var t = true;
+
         this.state.contract.methods.purchase(photo).send({from: this.state.account, value: price})
             .once('receipt', (receipt) => {console.log("Ha hecho la compra");}) 
             .on("transactionHash", function () {console.log("Hash")})
             .on("receipt", function () {console.log("Receipt");})
-            .on("confirmation", function () {
-                console.log("Confirmed");
-                {this.props.receiveProps(this.state.authorId, this.state.author, this.state.date, this.state.title, this.state.price, this.state.hash, this.state.url)}
-                //{this.setState({disabled: true})}         //algo asi para hacer que desaparezca la foto de aqui
-            })
-            .on("error", async function () {console.log("Error");});
-    }*/
+            .on("error", async function () {console.log("Error");})
+            .on("confirmation", async function () {console.log("Confirmed");
 
-    toBuy(e) {
-        e.preventDefault();
-        console.log("hash: ", this.state.hash);
+                if(t) {
+                    let data = new FormData();                              
+                    data.append('hash', this.state.hash);
 
-            let data = new FormData();
-            data.append('hash', this.state.hash);
-            request('post', "/v1/community/imageSold", data,
-                (response) => {},
-                (error) => {})
+                    request('post', "/v1/community/imageSold", data,        //Post-imageSold (para luego descargar desde sold)
+                        (response) => {console.log("responseSold")},
+                        (error) => {console.log("errorSold")})
+
+                    request('delete', `/v1/community/delete2?page=${this.state.page}`, data,            //Delete2 (foto de la galería)
+                        (response) => {console.log("responseDelete2")},                      
+                        (error) => {console.log("errorDelete2")})
+                    
+                    t = false;
+                }
+            }.bind(this));
     }
 
     render() {
@@ -93,7 +95,7 @@ class Image extends React.Component {
                 </div>
                 <img className = "image-content" alt = {this.state.title} src = {`data:image/jpg;base64,${this.state.url}`}/>
                 <div className="image-gallery-bottom">
-                    <Link to ={`/users/${this.state.authorId}`} className = "box-author">{this.state.author}</Link>
+                    <div className = "box-author">{this.state.author}</div>
                     <button className = "box-btn" onClick ={this.toBuy}>Comprar</button>
                 </div>
             </section>

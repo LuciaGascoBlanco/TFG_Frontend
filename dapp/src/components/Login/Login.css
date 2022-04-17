@@ -1,3 +1,7 @@
+.login, .password, .firstName, .lastName {
+    font-family: 'Papyrus';
+}
+
 .login-popin {
     background: rgb(83, 78, 78);
     text-align: right;
@@ -35,6 +39,7 @@
     font-size: 18px;
     padding: 5px;
     width: 100%;
+    border-radius: 5px;
 }
 
 .login-popin form {
@@ -45,7 +50,48 @@
     font-size: 16px;
 }
 
+.login-popin .iconFlex {
+    display:flex;
+    align-items:center;
+    border: dotted 1px red;
+    padding: 5px
+}
+
 .login-popin .error-msg {
     color: red;
-    text-align: center;
-} 
+    margin:4px 0 4px 15px; 
+    font-size: 15px;
+    clear: left;
+    text-align: left;
+    vertical-align: middle;
+    line-height:25px;
+    } 
+
+.login-popin .icon {
+    color: red;
+    font-size: 20px;
+    margin-left: 15px;
+    display:inline-block;
+    vertical-align:top;
+}
+
+.loginFlex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile-photo {
+    margin-right: 50px;
+}
+
+.loginFlexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    margin-bottom: 30px;
+    align-self: flex-start;
+}

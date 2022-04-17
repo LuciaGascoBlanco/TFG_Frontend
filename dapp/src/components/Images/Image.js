@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "react-router-dom";
+import './Images.css';
 
 class Image extends React.Component {
     constructor(props) {
@@ -20,7 +20,7 @@ class Image extends React.Component {
         return (
             <div className = "box">
                 <div className = "box-header">
-                    <Link to ={`/users/${this.state.authorId}`} className = "box-author">{this.state.author}</Link>
+                    <div className = "box-author">{this.state.author}</div>
                     <div className = "box-date">{this.state.date}</div>
                 </div>
                 <div className = "image-title">{this.state.title}</div>

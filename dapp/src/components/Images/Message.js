@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "react-router-dom";
+import './Images.css';
 
 class Message extends React.Component {
     constructor(props) {
@@ -16,7 +16,7 @@ class Message extends React.Component {
         return (
             <div className = "box4">
                 <div className = "box-header">
-                    <Link to ={`/users/${this.state.authorIdM}`} className = "box-author">{this.state.authorM}</Link>
+                    <div className = "box-author">{this.state.authorM}</div>
                     <div className = "box-date">{this.state.dateM}</div>
                 </div>
                 <div className = "message-content">{this.state.contentM}</div>

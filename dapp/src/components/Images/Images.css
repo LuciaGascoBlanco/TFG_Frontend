@@ -142,9 +142,10 @@
     margin-top: 5px;
 }
 
-.box4 .box-header .box-author {
+.box-author {
     font-size: 25px;
     color: white;
+    text-decoration: underline;
 }
 
 .box3 .message-post {
@@ -167,8 +168,7 @@
 
 .both .notes{
     font-size: 30px;
-    color: #1D1C1C; 
-    font-style: italic;
+    color: #1D1C1C;
 }
 
 
