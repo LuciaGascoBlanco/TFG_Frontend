@@ -32,7 +32,7 @@ class Sold extends React.Component {
                                 <div className = "price">{image.price + " wei"}</div>
                                 <div className = "box-date">{formatDate(image.createdDate)}</div>
                             </div>
-                            <img className = "image-content" alt = {image.title} src = {`data:image/jpg;base64,${image.path}`}/>
+                            <img id = "image-content" className = "image-content" alt = {image.title} src = {`data:image/jpg;base64,${image.path}`}/>
                             <div className="image-gallery-bottom">
                                 <div className = "box-author">{formatName(image.userDto)}</div>
                             </div>

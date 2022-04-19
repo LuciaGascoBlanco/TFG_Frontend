@@ -3,6 +3,7 @@ import {request} from "../../helpers";
 import Web3 from 'web3';
 import Photo from '../../abis/Photo.json';
 import BigNumber from "bignumber.js";
+import Swal from 'sweetalert2';
 
 class Image extends React.Component {
     constructor(props) {
@@ -10,7 +11,6 @@ class Image extends React.Component {
         this.state = {
              account: '',
              contract: null,
-             page : 0,
              authorId : props.authorId,
              author : props.author,
              date : props.date,
@@ -49,6 +49,7 @@ class Image extends React.Component {
 
     toBuy = (e) => {
         e.preventDefault();
+
         var StringHash = JSON.stringify(this.state.hash);
         var BNPrice = new BigNumber(this.state.price);
         this.purchase(BNPrice, StringHash, e);
@@ -60,14 +61,26 @@ class Image extends React.Component {
         await this.loadBlockchainData();
 
         var t = true;
-
         this.state.contract.methods.purchase(photo).send({from: this.state.account, value: price})
-            .once('receipt', (receipt) => {console.log("Ha hecho la compra");}) 
-            .on("transactionHash", function () {console.log("Hash")})
-            .on("receipt", function () {console.log("Receipt");})
-            .on("error", async function () {console.log("Error");})
+            .once('receipt', (receipt) => {console.log("Receipt");}) 
+            .on("transactionHash", function () {
+                Swal.fire({                                                    
+                    title: "Información",
+                    text: "Espere unos segundos mientras se completa la transacción.",
+                    icon: "info",
+                    width: "20%",
+                    backdrop: true,
+                    showCancelButton: false, 
+                    showConfirmButton: false,
+                    timer: 50000,
+                    allowEnterKey: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            })
+            .on("error", async function () {
+                window.location.reload();})
             .on("confirmation", async function () {console.log("Confirmed");
-
                 if(t) {
                     let data = new FormData();                              
                     data.append('hash', this.state.hash);
@@ -76,11 +89,13 @@ class Image extends React.Component {
                         (response) => {console.log("responseSold")},
                         (error) => {console.log("errorSold")})
 
-                    request('delete', `/v1/community/delete2?page=${this.state.page}`, data,            //Delete2 (foto de la galería)
+                    request('delete', "/v1/community/delete2", data,            //Delete2 (foto de la galería)
                         (response) => {console.log("responseDelete2")},                      
                         (error) => {console.log("errorDelete2")})
                     
                     t = false;
+
+                    window.location.reload();
                 }
             }.bind(this));
     }

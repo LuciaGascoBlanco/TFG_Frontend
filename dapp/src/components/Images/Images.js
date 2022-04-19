@@ -21,13 +21,11 @@ class Images extends React.Component {
              images : [],
              postContent : "",
              postContent2 : "",
-             page : 0,
              hideMore : false,
              imgSrc : null,
              msgError: "",
 
              messages : [],
-             pageM : 0,
              hideMoreM : false,
              postContentM : ""
          }
@@ -79,21 +77,36 @@ class Images extends React.Component {
                 data.append('price', this.state.postContent2);
                 upload("/v1/community/images", data,
                         (response) => {
-                            request('get', `/v1/community/images?page=${this.state.page}`, {},
+                            request('get', "/v1/community/images", {},
                                 (response) => {
                                     this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
                                     document.getElementById('box1').reset();
                                     this.state.images.map((image, i) => {
-                                        if(i === 0) {     
+                                        if(i === 0) {    
                                             //mint
                                             var BNPrice = new BigNumber(image.price);           
                                             var StringHash = JSON.stringify(image.hash);
                                             this.state.contract.methods.mint(BNPrice, StringHash).send({from: this.state.account})
-                                            .once('receipt', (receipt) => {console.log("Ha hecho el mint");}) 
-                                            .on("transactionHash", function () {console.log("Hash")})
+                                            .once('receipt', (receipt) => {
+                                                window.location.reload();}) 
+                                            .on("transactionHash", function () {
+                                                Swal.fire({                                                    
+                                                    title: "Información",
+                                                    text: "Espere unos segundos mientras se completa la transacción.",
+                                                    icon: "info",
+                                                    width: "20%",
+                                                    backdrop: true,
+                                                    showCancelButton: false, 
+                                                    showConfirmButton: false,
+                                                    timer: 50000,
+                                                    allowEnterKey: false,
+                                                    allowEscapeKey: false,
+                                                    allowOutsideClick: false
+                                                });
+                                            })
                                             .on("confirmation", function () {console.log("Confirmed");})
                                             .on("error", async function () {   //si se hace un reject en la transacción
-                                                request('delete', `/v1/community/delete?page=${this.state.page}`, {},
+                                                request('delete', "/v1/community/delete", {},
                                                     (response) => {
                                                         this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
                                                     },                      
@@ -132,7 +145,7 @@ class Images extends React.Component {
         await this.loadWeb3();
         await this.loadBlockchainData();
 
-        request('get', `/v1/community/images?page=${this.state.page}`, {},  
+        request('get', "/v1/community/images", {},
             (response) => {
                 this.state.images.push.apply(this.state.images, response.data);
                 this.setState({images : this.state.images, hideMore : response.data.length === 0});
@@ -140,7 +153,7 @@ class Images extends React.Component {
             (error) => {})
 
         //MESSAGES
-        request('get', `/v1/community/messages?page=${this.state.pageM}`, {}, 
+        request('get', "/v1/community/messages", {}, 
             (response) => {
                 this.state.messages.push.apply(this.state.messages, response.data);
                 this.setState({messages : this.state.messages, hideMoreM : response.data.length === 0});},
@@ -175,8 +188,8 @@ class Images extends React.Component {
                         <div className = "box0">  
                             <form id = "box1" className = "box1">
                                 <textarea id = "image-post" className = "image-post" placeholder = "Título de la imagen" onChange = {this.onChangeHandler} required/>
-                                <input type="number" id = "price" className = "price" placeholder = "Precio en wei" onChange = {this.onChangeHandler2} required/>
-                                {this.state.imgSrc && <img className = "image-content" alt = "preview" src = {this.state.imgSrc}/>}
+                                <input type="number" id = "price" className = "price" placeholder = "Precio en Wei" onChange = {this.onChangeHandler2} required/>
+                                {this.state.imgSrc && <img className = "image-content2" alt = "preview" src = {this.state.imgSrc}/>}
                                 <input className = "image-input" ref= {this.fileInput} type = "file" name = "filename" onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png"/>
                                 <input type="submit" value="Mintear" className = "box-btn0" onClick ={this.onPublish}/>
                                 {this.state.msgError && <p className="error-msg">{this.state.msgError}</p>}

@@ -15,7 +15,9 @@ class RegularLayout extends React.Component {
         super(props);
         this.state = {
             account: '',
-            contract: null
+            contract: null,
+            firstName: "",
+            lastName: ""
         }
     }
 
@@ -26,17 +28,12 @@ class RegularLayout extends React.Component {
     async componentDidMount() {
         await this.loadWeb3();
         await this.loadBlockchainData();
-    }
 
-    onLogout = e => {
-        e.preventDefault();
-        request('post', '/v1/signOut', {},
-                (response) => {
-                    setAuthHeader('');
-                    this.props.history.push('/login');
-                },
-                (error) => {})
-    };
+        request('get', "/v1/community/user", {},
+            (response) => {
+                this.setState({firstName: response.data.firstName, lastName: response.data.lastName});},
+            (error) => {})
+    }
 
     async loadWeb3() {
         if (window.ethereum) {
@@ -68,6 +65,16 @@ class RegularLayout extends React.Component {
         }
     }
 
+    onLogout = e => {
+        e.preventDefault();
+        request('post', '/v1/signOut', {},
+                (response) => {
+                    setAuthHeader('');
+                    this.props.history.push('/login');
+                },
+                (error) => {})
+    };
+
     async handleChange(e) {
         e.preventDefault();
         this.props.history.push("/login");
@@ -79,7 +86,10 @@ class RegularLayout extends React.Component {
                 <div className="regular-layout-body">
                     <div className="regular-head">
                         <div className="flex">
-                            <Link to={"/login"} className="tabLogout"><img src={Profile} width="auto" alt="profile" height="50"/></Link>
+                            <div className="flexNameLogout"> 
+                                <div className="user">{this.state.firstName + " " + this.state.lastName}</div>    
+                                <button onClick = {this.onLogout} className="tabLogout"><img src={Profile} width="auto" alt="profile" height="50"/></button>
+                            </div>   
                             <img className="regular-title" src={Logo} width="auto" alt="logo" height="45"/>
                         </div>
                         <div className="tabs">

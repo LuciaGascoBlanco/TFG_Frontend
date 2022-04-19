@@ -37,7 +37,12 @@
 }
 
 .regular-layout-body .flex .tabLogout{
-    margin: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    margin-left: 6px;
+    background-color: #1D1C1C;
+    border: none;
 }
 
 .regular-layout .regular-layout-body .footer {
@@ -83,4 +88,15 @@
     text-align: left;
     font-size: 18px;
     color: white;
+}
+
+.flexNameLogout {
+    display: flex;
+    flex-direction: row;
+}
+
+.user {
+    margin-top: 34px;
+    margin-bottom: 20px;
+    font-size: 20px;
 }

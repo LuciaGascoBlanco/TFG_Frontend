@@ -24,7 +24,8 @@ class Login extends React.Component {
             login: "",
             password: "",
             tabToShow: "signIn",
-            msgError: ""
+            msgError: "",
+            isLoading: true
         };
     };
 

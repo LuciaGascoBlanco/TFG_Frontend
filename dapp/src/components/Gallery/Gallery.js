@@ -15,7 +15,6 @@ class Gallery extends React.Component {
              account: '',
              contract: null,
              images : [],
-             page : 0,
              hideMore : false
          }
          this.fileInput = React.createRef();
@@ -51,7 +50,7 @@ class Gallery extends React.Component {
         await this.loadWeb3();
         await this.loadBlockchainData();
 
-        request('get', `/v1/community/gallery?page=${this.state.page}`, {},  
+        request('get', "/v1/community/gallery", {},  
             (response) => {
                 this.state.images.push.apply(this.state.images, response.data);
                 this.setState({images : this.state.images, hideMore : response.data.length === 0});

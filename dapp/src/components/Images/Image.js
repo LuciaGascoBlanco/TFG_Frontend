@@ -26,7 +26,7 @@ class Image extends React.Component {
                 <div className = "image-title">{this.state.title}</div>
                 <div className = "image-title">{this.state.hash}</div>
                 <div className = "image-title">{this.state.price}</div>
-                <img className = "image-content" alt = {this.state.title} src = {`data:image/jpg;base64,${this.state.url}`}/>
+                <img className = "image-content2" alt = {this.state.title} src = {`data:image/jpg;base64,${this.state.url}`}/>
             </div>
         )
     }
