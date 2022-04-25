@@ -35,7 +35,7 @@ class Images extends React.Component {
     async loadWeb3() {
         if (window.ethereum) {
           window.web3 = new Web3(window.ethereum)
-          await window.ethereum.enable()
+          await window.ethereum.request({method: 'eth_requestAccounts'})
         } else if (window.web3) {
           window.web3 = new Web3(window.web3.currentProvider)
         } else {window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')}
@@ -105,7 +105,7 @@ class Images extends React.Component {
                                                 });
                                             })
                                             .on("confirmation", function () {console.log("Confirmed");})
-                                            .on("error", async function () {   //si se hace un reject en la transacción
+                                            .on("error", async function () {
                                                 request('delete', "/v1/community/delete", {},
                                                     (response) => {
                                                         this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
@@ -115,7 +115,7 @@ class Images extends React.Component {
                                                 window.location.reload();
                                             }.bind(this));
                                         }
-                                    return(console.log(StringHash))})  //return para quitar el warning
+                                    return true;})
                                 },                      
                                 (error) => {})
                         },
@@ -190,7 +190,15 @@ class Images extends React.Component {
                                 <textarea id = "image-post" className = "image-post" placeholder = "Título de la imagen" onChange = {this.onChangeHandler} required/>
                                 <input type="number" id = "price" className = "price" placeholder = "Precio en Wei" onChange = {this.onChangeHandler2} required/>
                                 {this.state.imgSrc && <img className = "image-content2" alt = "preview" src = {this.state.imgSrc}/>}
-                                <input className = "image-input" ref= {this.fileInput} type = "file" name = "filename" onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png"/>
+                                                           
+                                <div class="container-input">
+                                    <input type="file" id="file-1" class="inputfile inputfile-1" ref= {this.fileInput} onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png" data-multiple-caption="{count} archivos seleccionados" multiple />
+                                    <label for="file-1">
+                                        <svg class="iborrainputfile" width="18" height="13" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                                        <span class="iborrainputfile">Seleccionar archivo</span>
+                                    </label>
+                                </div>
+                               
                                 <input type="submit" value="Mintear" className = "box-btn0" onClick ={this.onPublish}/>
                                 {this.state.msgError && <p className="error-msg">{this.state.msgError}</p>}
                             </form>

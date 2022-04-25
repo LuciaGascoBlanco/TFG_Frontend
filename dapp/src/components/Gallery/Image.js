@@ -26,7 +26,7 @@ class Image extends React.Component {
     async loadWeb3() {
         if (window.ethereum) {
           window.web3 = new Web3(window.ethereum)
-          await window.ethereum.enable()
+          await window.ethereum.request({method: 'eth_requestAccounts'})
         } else if (window.web3) {
           window.web3 = new Web3(window.web3.currentProvider)
         } else {window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')}
@@ -105,7 +105,7 @@ class Image extends React.Component {
             <section className = "image-gallery">
                 <div className = "image-gallery-header">
                     <div className = "image-title">{this.state.title + " - "}</div>
-                    <div className = "price">{this.state.price + " wei"}</div>
+                    <div className = "price">{this.state.price + " Wei"}</div>
                     <div className = "box-date">{this.state.date}</div>
                 </div>
                 <img className = "image-content" alt = {this.state.title} src = {`data:image/jpg;base64,${this.state.url}`}/>

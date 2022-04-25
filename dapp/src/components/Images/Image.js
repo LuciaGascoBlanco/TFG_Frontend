@@ -23,9 +23,13 @@ class Image extends React.Component {
                     <div className = "box-author">{this.state.author}</div>
                     <div className = "box-date">{this.state.date}</div>
                 </div>
-                <div className = "image-title">{this.state.title}</div>
-                <div className = "image-title">{this.state.hash}</div>
-                <div className = "image-title">{this.state.price}</div>
+                <div className="flexImage0">
+                    <div className="flexImage1">
+                        <div className = "image-title">{this.state.title + " - "}</div>
+                        <div className = "image-price">{this.state.price + " Wei"}</div>
+                    </div>
+                    <div className = "image-hash">{this.state.hash}</div>
+                </div>
                 <img className = "image-content2" alt = {this.state.title} src = {`data:image/jpg;base64,${this.state.url}`}/>
             </div>
         )

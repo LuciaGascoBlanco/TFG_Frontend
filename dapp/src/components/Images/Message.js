@@ -17,7 +17,7 @@ class Message extends React.Component {
             <div className = "box4">
                 <div className = "box-header">
                     <div className = "box-author">{this.state.authorM}</div>
-                    <div className = "box-date">{this.state.dateM}</div>
+                    <div className = "box-dateM">{this.state.dateM}</div>
                 </div>
                 <div className = "message-content">{this.state.contentM}</div>
             </div>

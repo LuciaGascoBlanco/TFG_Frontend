@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import Web3 from 'web3';
 import Photo from '../abis/Photo.json';
 import Logo from '../public/Logo.png';
-import Profile from '../public/Profile.png';
+import User from '../public/User.svg';
 
 class RegularLayout extends React.Component {
 
@@ -17,7 +17,8 @@ class RegularLayout extends React.Component {
             account: '',
             contract: null,
             firstName: "",
-            lastName: ""
+            lastName: "",
+            accountChanged: false
         }
     }
 
@@ -38,7 +39,7 @@ class RegularLayout extends React.Component {
     async loadWeb3() {
         if (window.ethereum) {
           window.web3 = new Web3(window.ethereum)
-          await window.ethereum.enable()
+          await window.ethereum.request({method: 'eth_requestAccounts'})
         }
         else if (window.web3) {
           window.web3 = new Web3(window.web3.currentProvider)
@@ -59,7 +60,12 @@ class RegularLayout extends React.Component {
             const abi = Photo.abi;
             const address = networkData.address;
             const contract = new web3.eth.Contract(abi, address);
-            this.setState({contract})          
+            this.setState({contract})       
+            
+            window.ethereum.on('accountsChanged', () => {
+                window.location.reload();
+            });
+            
         } else {
             window.alert('Smart contract not deployed to detected network.')
         }
@@ -88,7 +94,7 @@ class RegularLayout extends React.Component {
                         <div className="flex">
                             <div className="flexNameLogout"> 
                                 <div className="user">{this.state.firstName + " " + this.state.lastName}</div>    
-                                <button onClick = {this.onLogout} className="tabLogout"><img src={Profile} width="auto" alt="profile" height="50"/></button>
+                                <button onClick = {this.onLogout} className="tabLogout"><img className="icon" src={User} width="auto" alt="profile" height="28"/></button>
                             </div>   
                             <img className="regular-title" src={Logo} width="auto" alt="logo" height="45"/>
                         </div>
@@ -97,6 +103,7 @@ class RegularLayout extends React.Component {
                             <Link to={"/images"} className="tab">Perfil</Link>
                             <Link to={"/gallery"} className="tab">Galería</Link>
                             <Link to={"/sold"} className="tab">Compras</Link>
+                            <Link to={"/favorites"} className="tab">Favoritos</Link>
                             <div className="account">{this.state.account}</div>
                         </div>
                     </div>

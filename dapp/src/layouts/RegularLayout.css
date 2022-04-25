@@ -22,6 +22,7 @@
     height: 180px;
     background: #1D1C1C;
     position: fixed;
+    z-index: 2;
     top: 0;
 }
 
@@ -32,15 +33,11 @@
 
 .regular-layout-body .regular-title {
     margin-top: 35px;
-    margin-right: 700px;
+    margin-right: 650px;
     align-items: flex-start;
 }
 
 .regular-layout-body .flex .tabLogout{
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 6px;
     background-color: #1D1C1C;
     border: none;
 }
@@ -65,7 +62,7 @@
 
 .regular-layout-body .tab {
     font-family: 'Papyrus';
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     margin-top: 5px;
     padding-left: 30px;
     padding-right: 30px;
@@ -93,10 +90,18 @@
 .flexNameLogout {
     display: flex;
     flex-direction: row;
+    margin-top: 42px;
+    margin-bottom: 20px;
+    margin-right: 25px;
+    margin-left: 6px;
 }
 
 .user {
-    margin-top: 34px;
-    margin-bottom: 20px;
+    align-self: flex-end;
+    margin-right: 8px;
     font-size: 20px;
+}
+
+.icon {
+    filter: invert(97%) sepia(89%) saturate(3%) hue-rotate(195deg) brightness(117%) contrast(100%);
 }

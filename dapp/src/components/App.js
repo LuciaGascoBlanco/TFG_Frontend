@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom
 import Images from "./Images/Images";
 import Gallery from "./Gallery/Gallery";
 import Sold from "./Sold/Sold";
+import Favorites from "./Favorites/Favorites";
 import CleanLayoutRoute from "./../layouts/CleanLayout";
 import Home from './Home/Home';
 import {getAuthToken} from "./../helpers";
@@ -36,6 +37,13 @@ class App extends React.Component {
                     <Route path="/sold" render={matchProps => getAuthToken() ? (
                     <RegularLayout>
                         <Sold {...matchProps} />
+                    </RegularLayout>
+                    ) : (<Redirect to="/login"/>
+                    )} />
+
+                    <Route path="/favorites" render={matchProps => getAuthToken() ? (
+                    <RegularLayout>
+                        <Favorites {...matchProps} />
                     </RegularLayout>
                     ) : (<Redirect to="/login"/>
                     )} />

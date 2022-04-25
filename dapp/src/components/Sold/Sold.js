@@ -4,11 +4,13 @@ import {request} from "../../helpers";
 import {formatDate, formatName} from "../Box/Box";
 import purchases from '../../public/Purchases.png';
 
-class Sold extends React.Component {
+class Favorites extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imagesArray: []
+            imagesArray: [],
+            color : [],
+            imagesLikeArray: []
         }
     }
 
@@ -16,8 +18,48 @@ class Sold extends React.Component {
         request('get', "/v1/community/imageSold", {},
             (response) => {
                 this.state.imagesArray.unshift.apply(this.state.imagesArray, response.data);
-                this.setState({images : this.state.images});},
+                this.setState({imagesArray: this.state.imagesArray})
+                this.state.imagesArray.map((image, index) => {
+                    if(image.like === "true") {
+                        document.getElementById(index).style.fill = "#f70707";
+
+                        var newItemsArr = JSON.parse(JSON.stringify(this.state.color));
+                        if(!newItemsArr[index]){ newItemsArr[index] = true }                        //cambiar color[i] a true
+                        this.setState({color : newItemsArr}); 
+                        return true;                     
+                    } else {return true;}
+                })
+            },
             (error) => {})
+    }
+
+    likePressed = (image, i) => e => {
+        e.preventDefault();
+        var newItemsArr = JSON.parse(JSON.stringify(this.state.color));
+
+        let data = new FormData();                              
+        data.append('hash', image.hash);
+
+        if(!this.state.color[i]) {                                              
+            document.getElementById(i).style.fill = "#f70707";
+
+            if(!newItemsArr[i]){ newItemsArr[i] = true }                        //cambiar color[i] a true
+            this.setState({color : newItemsArr});
+
+            request('post', "/v1/community/like", data,                         //postLike
+                        (response) => {},
+                        (error) => {})
+
+        } else {                                                             
+            document.getElementById(i).style.fill = "white";
+     
+            if(newItemsArr[i]) { newItemsArr[i] = false }                        //cambiar color[i] a false
+            this.setState({color : newItemsArr});
+
+            request('post', "/v1/community/dislike", data,                       //postDislike
+                        (response) => {},
+                        (error) => {})
+        }
     }
 
     render() {
@@ -29,12 +71,15 @@ class Sold extends React.Component {
                         <section className="image-gallery" key={i}>
                             <div className = "image-gallery-header">
                                 <div className = "image-title">{image.title + " - "}</div>
-                                <div className = "price">{image.price + " wei"}</div>
+                                <div className = "price">{image.price + " Wei"}</div>
                                 <div className = "box-date">{formatDate(image.createdDate)}</div>
                             </div>
-                            <img id = "image-content" className = "image-content" alt = {image.title} src = {`data:image/jpg;base64,${image.path}`}/>
+                            <img id = "image-content" className = "image-content" alt = {image.title} src = {`data:image/jpg;base64,${image.path}`} onDoubleClick={this.likePressed(image, i)}/>
                             <div className="image-gallery-bottom">
                                 <div className = "box-author">{formatName(image.userDto)}</div>
+                                <button className = "box-btnLike" onClick={this.likePressed(image, i)}>
+                                    <svg id = {i} className="like" width="100" height="85" viewBox="0 0 100 85"><path d="M92.71,7.27L92.71,7.27c-9.71-9.69-25.46-9.69-35.18,0L50,14.79l-7.54-7.52C32.75-2.42,17-2.42,7.29,7.27v0 c-9.71,9.69-9.71,25.41,0,35.1L50,85l42.71-42.63C102.43,32.68,102.43,16.96,92.71,7.27z"></path></svg>
+                                </button>
                             </div>
                         </section>)}
                 </div>
@@ -43,4 +88,4 @@ class Sold extends React.Component {
     }
 }
 
-export default Sold;
+export default Favorites;
