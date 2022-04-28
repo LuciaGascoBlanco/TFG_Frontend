@@ -82,14 +82,23 @@ class Images extends React.Component {
                                     this.setState({images : response.data, hideMore : response.data.length === 0, imgSrc : null, postContent : "", postContent2 : ""});
                                     document.getElementById('box1').reset();
                                     this.state.images.map((image, i) => {
-                                        if(i === 0) {    
+                                        if(i === 0) {
                                             //mint
                                             var BNPrice = new BigNumber(image.price);           
                                             var StringHash = JSON.stringify(image.hash);
                                             this.state.contract.methods.mint(BNPrice, StringHash).send({from: this.state.account})
                                             .once('receipt', (receipt) => {
-                                                window.location.reload();}) 
-                                            .on("transactionHash", function () {
+                                                window.location.reload();
+                                            })
+                                            .on("transactionHash", async function () {
+                                                //subir la cuenta a la BBDD
+                                                let data1 = new FormData();
+                                                data1.append('hash', image.hash);
+                                                data1.append('account1', this.state.account);
+                                                request('post', "/v1/community/accountMinter", data1,
+                                                        (response) => {},
+                                                        (error) => {})
+
                                                 Swal.fire({                                                    
                                                     title: "Información",
                                                     text: "Espere unos segundos mientras se completa la transacción.",
@@ -103,8 +112,8 @@ class Images extends React.Component {
                                                     allowEscapeKey: false,
                                                     allowOutsideClick: false
                                                 });
-                                            })
-                                            .on("confirmation", function () {console.log("Confirmed");})
+                                            }.bind(this))
+                                            .on("confirmation", function () {})
                                             .on("error", async function () {
                                                 request('delete', "/v1/community/delete", {},
                                                     (response) => {
@@ -191,11 +200,11 @@ class Images extends React.Component {
                                 <input type="number" id = "price" className = "price" placeholder = "Precio en Wei" onChange = {this.onChangeHandler2} required/>
                                 {this.state.imgSrc && <img className = "image-content2" alt = "preview" src = {this.state.imgSrc}/>}
                                                            
-                                <div class="container-input">
-                                    <input type="file" id="file-1" class="inputfile inputfile-1" ref= {this.fileInput} onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png" data-multiple-caption="{count} archivos seleccionados" multiple />
-                                    <label for="file-1">
-                                        <svg class="iborrainputfile" width="18" height="13" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
-                                        <span class="iborrainputfile">Seleccionar archivo</span>
+                                <div className="container-input">
+                                    <input type="file" id="file-1" className="inputfile inputfile-1" ref= {this.fileInput} onChange = {this.onUploadImage} accept = "image/gif, image/jpeg, image/png" data-multiple-caption="{count} archivos seleccionados" multiple />
+                                    <label htmlFor="file-1">
+                                        <svg className="iborrainputfile" width="18" height="13" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                                        <span className="iborrainputfile">Seleccionar archivo</span>
                                     </label>
                                 </div>
                                

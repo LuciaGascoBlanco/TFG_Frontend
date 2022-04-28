@@ -2,10 +2,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
     grid-column-gap: 1.5em;
+    grid-row-gap: 2em;
     padding: 3%;
 }
 
-.gallery .gallery-body .box-btn {
+.image-gallery .box-btn {
     border: 2px solid #1D1C1C;
     color: #1D1C1C;
     background: white;
@@ -18,16 +19,11 @@
     flex-direction: column;
 }
 
-.image-content:hover {
-    display: block;
-    transform: scaleX(1.08) scaleY(1.15);
-}
-
 .image-content {
     display: block;
     transition: transform 0.2s;
     width: 100%;
-    height: 80%;
+    height: 500px;
     border: 4px solid #1D1C1C; padding: 4px; background: white;
 }
 
@@ -36,6 +32,11 @@
     flex-direction: row;
     justify-content: flex-start;
     margin-bottom: 5px;
+}
+
+.image-content:hover {
+    display: block;
+    transform: scaleX(1.08) scaleY(1.15);
 }
 
 .image-gallery-header .box-date {
@@ -99,4 +100,92 @@
     height: 16px;
     stroke: black;
     stroke-width: 5;
+}
+
+.flexHistory {
+    display: flex;
+    flex-direction: row;
+}
+
+.rows {
+    font-size: 13px;
+    color: black;
+    
+}
+
+.table {
+    align-self: flex-start;
+    border: 2px solid black;
+    width: 100%;  
+    margin-bottom: 100px; 
+}
+
+.table2 {
+    align-self: flex-start;
+    border: 2px solid black;
+    width: 100%;   
+}
+
+.caption {
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 7px;
+}
+
+.thread {
+    font-size: 13px;
+    color: black;
+    
+}
+
+tbody tr:nth-child(1n) {
+    background-color: rgb(208, 181, 131);
+    text-align: center;
+}
+
+tbody tr:nth-child(2n) {
+    background-color: rgb(222, 213, 195);
+    text-align: center;
+}
+
+tbody td:nth-child(3n) {
+    background-color: white;
+    text-align: center;
+}
+
+tbody td:nth-child(4n) {
+    background-color: white;
+    text-align: center;
+}
+
+tr {
+    background-color: white;
+    height: 30px;
+}
+
+.th1, .td1 {
+    width: 30%;
+}
+
+.th2, .td2 {
+    width: 30%;
+}
+
+.image-body {
+    margin: 50px;
+}
+
+.flexTables {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 60%;
+    margin-top: 3%;
+    margin-right: 45px;
+}
+
+.image-content1 {
+    border: 4px solid #1D1C1C; padding: 4px; background: white;
+    width: 550px;
+    height: 500px;
 }

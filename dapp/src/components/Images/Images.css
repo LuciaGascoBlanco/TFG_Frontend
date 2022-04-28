@@ -175,17 +175,17 @@
 }
 
 .box4 .box-header .box-dateM {
-    font-size: 14px;
-    margin-top: 5px;
+    font-size: 13px;
+    margin-top: 8px;
 }
 
 .box .box-header .box-date {
-    margin-top: 5px;
-    font-size: 14px;
+    margin-top: 8px;
+    font-size: 13px;
 }
 
 .box-author {
-    font-size: 25px;
+    font-size: 21px;
     color: white;
     text-decoration: underline;
 }

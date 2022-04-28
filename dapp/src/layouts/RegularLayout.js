@@ -60,7 +60,7 @@ class RegularLayout extends React.Component {
             const abi = Photo.abi;
             const address = networkData.address;
             const contract = new web3.eth.Contract(abi, address);
-            this.setState({contract})       
+            this.setState({contract}) 
             
             window.ethereum.on('accountsChanged', () => {
                 window.location.reload();

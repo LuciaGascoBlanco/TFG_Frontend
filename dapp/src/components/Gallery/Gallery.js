@@ -3,7 +3,7 @@ import {request} from "../../helpers";
 import {formatDate, formatName} from "../Box/Box";
 import Image from "./Image";
 import './Gallery.css';
-import photo from '../../public/Portada.png';
+import gallery from '../../public/Galeria.png';
 
 class Gallery extends React.Component {
      constructor(props) {
@@ -27,7 +27,7 @@ class Gallery extends React.Component {
     render() {
         return(
             <div>
-                <img src={photo} alt="header" width="auto" height="210"/>               
+                <img src={gallery} alt="header" width="auto" height="210"/>               
                 <div className = "gallery-body"> {this.state.images.length > 0 && this.state.images.map((image) => <Image key= {image.id} authorId = {image.userDto.id} author = {formatName(image.userDto)} date = {formatDate(image.createdDate)} title = {image.title} price = {image.price} hash = {image.hash} url = {image.path} />)} </div>
                 {this.state.images.length === 0 && <div></div>}               
             </div>

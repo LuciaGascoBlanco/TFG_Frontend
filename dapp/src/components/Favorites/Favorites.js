@@ -4,7 +4,9 @@ import {request} from "../../helpers";
 import {formatDate, formatName} from "../Box/Box";
 import favorites from '../../public/Favorites.png';
 
-class Sold extends React.Component {
+import {Link} from "react-router-dom";
+
+class Favorites extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,6 +22,11 @@ class Sold extends React.Component {
             (error) => {})
     }
 
+    onMouseOver = (hash) => e => {
+        e.preventDefault();
+        this.props.photoClick(hash);
+    }
+
     render() {
         return (
             <div>
@@ -32,7 +39,7 @@ class Sold extends React.Component {
                                 <div className = "price">{image.price + " Wei"}</div>
                                 <div className = "box-date">{formatDate(image.createdDate)}</div>
                             </div>
-                            <img id = "image-content" className = "image-content" alt = {image.title} src = {`data:image/jpg;base64,${image.path}`}/>
+                            <Link to={{pathname: "/history"}}><img id = "image-content" className = "image-content" alt = {image.title} src = {`data:image/jpg;base64,${image.path}`} onMouseOver={this.onMouseOver(image.hash)}/></Link>
                             <div className="image-gallery-bottom">
                                 <div className = "box-author">{formatName(image.userDto)}</div>
                             </div>
@@ -43,4 +50,4 @@ class Sold extends React.Component {
     }
 }
 
-export default Sold;
+export default Favorites;

@@ -23,7 +23,7 @@ contract Photo is ERC721 {
       photos.push(_photo);
       uint tokenID = photos.length -1;                        
       _safeMint(msg.sender, tokenID);    
-      require(ownerOf(tokenID) == msg.sender, "caller must own given token");  //se debería cumplir siempre, quitable tras pruebas
+      require(ownerOf(tokenID) == msg.sender, "caller must own given token");
       listings[tokenID] = Listing(price, msg.sender); 
       _photoExists[_photo] = true;
     }
