@@ -64,15 +64,6 @@ class Image extends React.Component {
         this.state.contract.methods.purchase(photo).send({from: this.state.account, value: price})
             .once('receipt', (receipt) => {console.log("Receipt");}) 
             .on("transactionHash", function () {
-
-                //subir la cuenta a la BBDD
-                let data1 = new FormData();
-                data1.append('hash', this.state.hash);
-                data1.append('account2', this.state.account);
-                request('post', "/v1/community/accountBuyer", data1,
-                        (response) => {},
-                        (error) => {})
-
                 Swal.fire({                                                    
                     title: "Información",
                     text: "Espere unos segundos mientras se completa la transacción.",
@@ -86,7 +77,7 @@ class Image extends React.Component {
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
-            }.bind(this))
+            })
             .on("error", async function () {
                 window.location.reload();})
             .on("confirmation", async function () {console.log("Confirmed");

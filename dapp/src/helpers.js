@@ -23,7 +23,6 @@ export const upload = (url, data, onSuccess, onError) => {
                 } catch (e) {
                     console.error(e);
                 }
-
             })
             .catch((response) => {
                 if (response.status === 401) {
@@ -41,14 +40,13 @@ export const request = (method, url, data, onSuccess, onError) => {
         data: data})
             .then((response) => {
                 if (url.includes('signIn')) {
-                    setAuthHeader(response.data.token)      //Aqui se deberia meter en el sign in
+                    setAuthHeader(response.data.token)      //Aqui se mete en el sign in, crea el token y lo envía en la cabecera
                 }
                 try {
-                    onSuccess(response)         //Aqui se deberia meter en el sign up
+                    onSuccess(response)
                 } catch (e) {
                     console.error(e);
                 }
-
             })
             .catch((response) => {
                 if (!url.includes('signIn')) {   //response.status === 401 && 

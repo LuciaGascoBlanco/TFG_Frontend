@@ -81,18 +81,13 @@ class RegularLayout extends React.Component {
                 (error) => {})
     };
 
-    async handleChange(e) {
-        e.preventDefault();
-        this.props.history.push("/login");
-    }
-
     render() {
         return (
             <div className="regular-layout">
                 <div className="regular-layout-body">
                     <div className="regular-head">
                         <div className="flex">
-                            <div className="flexNameLogout"> 
+                            <div className="flexNameLogout">
                                 <div className="user">{this.state.firstName + " " + this.state.lastName}</div>    
                                 <button onClick = {this.onLogout} className="tabLogout"><img className="icon" src={User} width="auto" alt="profile" height="28"/></button>
                             </div>   

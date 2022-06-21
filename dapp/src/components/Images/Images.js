@@ -91,14 +91,6 @@ class Images extends React.Component {
                                                 window.location.reload();
                                             })
                                             .on("transactionHash", async function () {
-                                                //subir la cuenta a la BBDD
-                                                let data1 = new FormData();
-                                                data1.append('hash', image.hash);
-                                                data1.append('account1', this.state.account);
-                                                request('post', "/v1/community/accountMinter", data1,
-                                                        (response) => {},
-                                                        (error) => {})
-
                                                 Swal.fire({                                                    
                                                     title: "Información",
                                                     text: "Espere unos segundos mientras se completa la transacción.",
@@ -112,7 +104,7 @@ class Images extends React.Component {
                                                     allowEscapeKey: false,
                                                     allowOutsideClick: false
                                                 });
-                                            }.bind(this))
+                                            })
                                             .on("confirmation", function () {})
                                             .on("error", async function () {
                                                 request('delete', "/v1/community/delete", {},

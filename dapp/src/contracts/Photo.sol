@@ -6,6 +6,8 @@ import "./ERC721.sol";
 
 contract Photo is ERC721 {
 
+    mapping(address => uint256) public balances;
+
     string[] public photos;
     mapping(string => bool) _photoExists;
 
@@ -14,7 +16,13 @@ contract Photo is ERC721 {
       address seller;
     }
     mapping(uint256 => Listing) public listings;
-    mapping(address => uint256) public balances;
+
+    struct User{
+      address seller;
+      address buyer;
+    }
+    mapping(string => User) public users;
+
 
     constructor() ERC721("Photo", "PHOTO") {}
 
@@ -48,9 +56,15 @@ contract Photo is ERC721 {
       balances[item.seller] += msg.value;                   
 
       safeTransferFrom(item.seller, msg.sender, tokenID);
-      listings[tokenID] = Listing(item.price, msg.sender);
+      users[_photo] = User(item.seller, msg.sender);
 
       address payable Seller = payable(item.seller);
       require(Seller.send(msg.value));
+    }
+
+    function getUsers(string memory _photo) public view returns (address seller, address buyer) {
+      User memory item = users[_photo];
+      seller=item.seller;
+      buyer=item.buyer;     
     }
 }

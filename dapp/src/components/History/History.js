@@ -2,6 +2,8 @@ import * as React from "react";
 import './../Gallery/Gallery.css';
 import {request} from "../../helpers";
 import {formatDate, formatName} from "../Box/Box";
+import Web3 from 'web3';
+import Photo from '../../abis/Photo.json';
 
 var image = {};
 var hash;
@@ -11,46 +13,58 @@ class History extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            account: '',
+            contract: null,
             imagesArray: [],
             accountMinter: "",
             accountBuyer: "",
-            name: "",
             hash: props.item
         }
     }
 
-    componentDidMount() {
+    async loadWeb3() {
+        if (window.ethereum) {
+          window.web3 = new Web3(window.ethereum)
+          await window.ethereum.request({method: 'eth_requestAccounts'})
+        } else if (window.web3) {
+          window.web3 = new Web3(window.web3.currentProvider)
+        } else {window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')}
+    }
+
+    async loadBlockchainData() {
+        const web3 = window.web3;
+        const accounts = await web3.eth.getAccounts();
+        this.setState({account: accounts[0]})
+
+        const networkId = await web3.eth.net.getId();
+        const networkData = Photo.networks[networkId];
+          if(networkData) {
+            const abi = Photo.abi;
+            const address = networkData.address;
+            const contract = new web3.eth.Contract(abi, address);
+            this.setState({contract})      
+          } else {window.alert('Smart contract not deployed to detected network.')}
+    }
+
+    async componentDidMount() {
+        await this.loadWeb3();
+        await this.loadBlockchainData();
 
         if(typeof this.state.hash === 'string' || this.state.hash instanceof String) {hash = this.state.hash} 
         else {hash = window.localStorage.getItem('hash');}                  //Para que se guarde al recargar la página
 
-            let data1 = new FormData();
-            data1.append('hash', hash);
+        var StringHash = JSON.stringify(hash);
+        var prueba = await this.state.contract.methods.getUsers(StringHash).call();
 
-            request('post', "/v1/community/getAccountMinter", data1,
-                (response) => {
-                    this.setState({accountMinter: response.data})
-                },
-                (error) => {}) 
-
-            request('post', "/v1/community/getAccountBuyer", data1,
+        this.setState({accountMinter: prueba.seller});
+        this.setState({accountBuyer: prueba.buyer});
+            
+        request('get', "/v1/community/imageSold", {},
             (response) => {
-                this.setState({accountBuyer: response.data})
+                this.state.imagesArray.unshift.apply(this.state.imagesArray, response.data);
+                this.setState({imagesArray: this.state.imagesArray})
             },
             (error) => {})
-
-            request('post', "/v1/community/getMinter", data1,
-            (response) => {
-                this.setState({name: formatName(response.data)})
-            },
-            (error) => {}) 
-            
-            request('get', "/v1/community/imageSold", {},
-                (response) => {
-                    this.state.imagesArray.unshift.apply(this.state.imagesArray, response.data);
-                    this.setState({imagesArray: this.state.imagesArray})
-                },
-                (error) => {})
     }
 
     render() {
@@ -61,7 +75,8 @@ class History extends React.Component {
                     if(image0.hash === this.state.hash) {                           //Guardar en el localStorage para que no se pierda al recargar
                         window.localStorage.setItem('image', JSON.stringify(image0));
                         image = JSON.parse(window.localStorage.getItem('image'));
-                        window.localStorage.setItem('hash', this.state.hash);           
+                        window.localStorage.setItem('hash', this.state.hash);  
+                        console.log(image0);         
                     }return true;})}
                 <div className="flexHistory">
                     <div className="image-body">
@@ -83,11 +98,11 @@ class History extends React.Component {
                             </thead>
                             <tbody>
                                 <tr className = "rows">
-                                    <td className="td1">{this.state.name} - {this.state.accountMinter}</td>
+                                    <td className="td1">{formatName(image.userDtoMinter)} - {this.state.accountMinter}</td>
                                     <td className="td2">{formatName(image.userDto)} - {this.state.accountBuyer}</td>
                                 </tr>
                                 <tr className = "rows">
-                                    <td className="td1">{this.state.name} - {this.state.accountMinter}</td>
+                                    <td className="td1">{formatName(image.userDtoMinter)} - {this.state.accountMinter}</td>
                                     <td className="td2">{"-"}</td>
                                 </tr>
                             </tbody>
@@ -102,8 +117,8 @@ class History extends React.Component {
                             </thead>
                             <tbody>
                                 <tr className = "rows">
-                                    <td ROWSPAN="2" className="td3">{image.price}</td>
-                                    <td ROWSPAN="2" className="td4">{formatDate(image.createdDate)}</td>
+                                    <td rowSpan="2" className="td3">{image.price}</td>
+                                    <td rowSpan="2" className="td4">{formatDate(image.createdDate)}</td>
                                 </tr>
                             </tbody>
                         </table>

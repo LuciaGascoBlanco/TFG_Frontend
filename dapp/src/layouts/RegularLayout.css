@@ -33,8 +33,8 @@
 
 .regular-layout-body .regular-title {
     margin-top: 35px;
-    margin-right: 650px;
-    align-items: flex-start;
+    position: absolute;
+    left: 700px;
 }
 
 .regular-layout-body .flex .tabLogout{
@@ -93,11 +93,10 @@
     margin-top: 42px;
     margin-bottom: 20px;
     margin-right: 25px;
-    margin-left: 6px;
 }
 
 .user {
-    align-self: flex-end;
+    align-self: center;
     margin-right: 8px;
     font-size: 20px;
 }
