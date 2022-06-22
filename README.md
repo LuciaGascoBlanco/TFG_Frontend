@@ -1,7 +1,8 @@
 <h1>Hola, soy Lucía 👋🏼👩🏻‍💻</h1>
 <h3>Estudiante del grado de Ingeniería de Tecnologías y servicios de Telecomunicación</h3>
 
-    Esta es la parte frontend de un proyecto de fin de carrera de la Universidad Politécnica de Madrid.
+    Este es el Frontend de un proyecto de fin de carrera de la Universidad Politécnica de Madrid. Ha consistido en el
+    desarrollo de un servicio web para la gestión de una galería de arte basada en NFT para la red Blockchain Ethereum.
 ### Sobre mí:
 - Nombre: Lucía Gascó
 - Redes sociales:
